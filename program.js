@@ -1,23 +1,20 @@
-var http = require('http');
-var bl = require('bl');
-var results = [];
-var count = 0;
+var net = require('net');
 
-function printResults() {
-	for (i = 0; i < 3; i++){
-		console.log(results[i]);
-	}
+function zeroPadding(nb) {
+	return (nb > 10) ? (nb) : ('0' + nb);
 }
 
-function httpGet(index) {
-	http.get(process.argv[2 + index], function(result) {
-		result.pipe(bl(function(err, data) {
-			if (err) return console.error(err);
-			results[index] = data.toString();
-			count++;
-			if (count == 3) printResults();
-		}))
-	})
+function formatDate(date) {
+	return date.getFullYear()
+		+'-'+zeroPadding((date.getMonth() + 1))
+        +'-'+zeroPadding(date.getDate())
+        +' '+zeroPadding(date.getHours())
+        +':'+zeroPadding(date.getMinutes());
 }
 
-for (var i = 0; i < 3; i++) httpGet(i);
+var server = net.createServer(function(socket) {
+	var date = new Date();
+	socket.end(formatDate(date) + '\n');
+});
+
+server.listen(Number(process.argv[2]));

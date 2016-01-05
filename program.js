@@ -1,20 +1,12 @@
-var net = require('net');
+var http = require('http');
+var fs = require('fs');
 
-function zeroPadding(nb) {
-	return (nb > 10) ? (nb) : ('0' + nb);
-}
+var fileRead = process.argv[3];
+var port = Number(process.argv[2]);
 
-function formatDate(date) {
-	return date.getFullYear()
-		+'-'+zeroPadding((date.getMonth() + 1))
-        +'-'+zeroPadding(date.getDate())
-        +' '+zeroPadding(date.getHours())
-        +':'+zeroPadding(date.getMinutes());
-}
-
-var server = net.createServer(function(socket) {
-	var date = new Date();
-	socket.end(formatDate(date) + '\n');
+var server = http.createServer(function(req, res) {
+	var fsStream = fs.createReadStream(fileRead);
+	fsStream.pipe(res);
 });
 
-server.listen(Number(process.argv[2]));
+server.listen(port);

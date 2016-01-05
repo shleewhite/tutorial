@@ -1,7 +1,11 @@
 var fs = require('fs');
-var buf = fs.readFileSync(process.argv[2]);
-var lines = buf.toString().split('/n').length;
+var fileName = process.argv[2];
 
-if (lines > 0) lines -= 1;
 
-console.log(lines);
+fs.readFile(fileName, 'utf8', function (err, data) {
+	if (err) return console.error(err);
+	else {
+		var nbLines = data.toString().split('\n').length -1 ;
+		console.log(nbLines);
+	}
+});

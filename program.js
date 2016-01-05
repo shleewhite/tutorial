@@ -1,11 +1,12 @@
 var fs = require('fs');
-var fileName = process.argv[2];
+var path = require('path');
 
-
-fs.readFile(fileName, 'utf8', function (err, data) {
+fs.readdir(process.argv[2], function (err, files){
 	if (err) return console.error(err);
-	else {
-		var nbLines = data.toString().split('\n').length -1 ;
-		console.log(nbLines);
-	}
+	files.forEach(function(file){
+		if (path.extname(file) === '.' + process.argv[3]) {
+			console.log(file);
+		}
+
+	});
 });

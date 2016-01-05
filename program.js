@@ -1,8 +1,11 @@
-var module = require('./mymodule.js');
+var http = require('http');
 
-module(process.argv[2], process.argv[3], function(err, list){
-	if (err) return console.error(err);
-	list.forEach(function(file) {
-		console.log(file);
+http.get(process.argv[2], function(result) {
+	result.setEncoding('utf8');
+	result.on('error', function(err) {
+		console.error(err);
+	});
+	result.on('data', function(chunk) {
+		console.log(chunk);
 	});
 });
